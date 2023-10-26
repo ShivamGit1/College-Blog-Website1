@@ -44,6 +44,8 @@ public class StartLoading extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 102, 153));
         jLabel1.setText("PHARMACY MANAGEMENT SYSTEM");
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pharmacyjava_modelLayer/first.jpg"))); // NOI18N
+
         close.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         close.setForeground(new java.awt.Color(204, 0, 51));
         close.setText("X ");
@@ -88,7 +90,7 @@ public class StartLoading extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(close, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(30, 30, 30)
                 .addComponent(Percentage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

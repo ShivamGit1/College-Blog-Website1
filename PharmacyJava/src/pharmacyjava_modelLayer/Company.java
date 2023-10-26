@@ -15,18 +15,23 @@ import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 import pharmacyjava.AccessLayer.Company_AccessLayer;
 
-/**
- *
- * @author bhard
- */
-public class Company extends javax.swing.JFrame {
+abstract interface Comp
+{
+    abstract void SelectMed();
+    abstract void add();
+    abstract void update();
+    abstract void delete();
+    abstract void clear();
+}
+public class Company extends javax.swing.JFrame implements Comp
+{
 
     /**
      * Creates new form Company
      */
     public Company() {
         initComponents();
-          SelectMed();
+        SelectMed();
     }
     Connection Con =null;
     Statement St =null;
@@ -401,12 +406,13 @@ public class Company extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    @Override
       public  void SelectMed() 
     {
         try {
             Con = DriverManager.getConnection("jdbc:derby://localhost:1527/pharmadb","User1","User1");
             St = Con.createStatement();
-            Rs = St.executeQuery("Select * from User1.COMPANYTBL");
+            Rs = St.executeQuery("Select COMPID as ID,COMPNAME AS NAME,COMPAD AS ADDRESS,COMPEXP AS EXPERIENCE,COMPPHONE AS PHONE_NUMBER  from User1.COMPANYTBL");
             CompanyTable.setModel(DbUtils.resultSetToTableModel(Rs));
             
             
@@ -431,8 +437,9 @@ public class Company extends javax.swing.JFrame {
     private void CompexpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CompexpActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CompexpActionPerformed
-
-    private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddBtnMouseClicked
+    @Override
+    public void add()
+    {
         if(Compid.getText().isEmpty()||Compname.getText().isEmpty()||Compad.getText().isEmpty()||Compexp.getText().isEmpty()||Compphone.getText().isEmpty()) 
         {
             JOptionPane.showMessageDialog(this, "Missing Information");
@@ -444,9 +451,14 @@ public class Company extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Company Successfully Added");
             SelectMed();
         }
+    }
+    private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddBtnMouseClicked
+        add();
     }//GEN-LAST:event_AddBtnMouseClicked
-
-    private void DeleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteBtnMouseClicked
+   
+    @Override
+    public void delete()
+    {
         if(Compid.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Enter the Company to be Deleted");
@@ -457,7 +469,10 @@ public class Company extends javax.swing.JFrame {
             ca.delete(Compid.getText());
             SelectMed();
             JOptionPane.showMessageDialog(this, "Company Deleted Successfully");
-        }
+        } 
+    }
+    private void DeleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteBtnMouseClicked
+       delete();
     }//GEN-LAST:event_DeleteBtnMouseClicked
 
     private void CompanyTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CompanyTableMouseClicked
@@ -469,31 +484,41 @@ public class Company extends javax.swing.JFrame {
          Compexp.setText(model.getValueAt(Myindex, 3).toString());
          Compphone.setText(model.getValueAt(Myindex, 4).toString());
     }//GEN-LAST:event_CompanyTableMouseClicked
-
+    
+    @Override
+    public void clear()
+    {
+        Compid.setText("");
+        Compname.setText("");
+        Compad.setText("");
+        Compexp.setText("");
+        Compphone.setText("");
+    }
     private void ClearBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClearBtnMouseClicked
-         Compid.setText("");
-         Compname.setText("");
-          Compad.setText("");
-          Compexp.setText("");
-          Compphone.setText("");
+        clear();
     }//GEN-LAST:event_ClearBtnMouseClicked
 
     private void ClearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ClearBtnActionPerformed
-
+    
+    @Override
+    public void update()
+    {
+        if(Compid.getText().isEmpty()||Compname.getText().isEmpty()||Compad.getText().isEmpty()||Compexp.getText().isEmpty()||Compphone.getText().isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(this, "Missing Information");
+        }
+        else
+        {
+            Company_AccessLayer ca=new Company_AccessLayer();
+            ca.update(Compid.getText(),Compname.getText(),Compad.getText(),Compexp.getText(),Compphone.getText());
+            JOptionPane.showMessageDialog(this, "Company Updated Successfully");
+            SelectMed();
+        }
+    }
     private void UpdateBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UpdateBtnMouseClicked
-         if(Compid.getText().isEmpty()||Compname.getText().isEmpty()||Compad.getText().isEmpty()||Compexp.getText().isEmpty()||Compphone.getText().isEmpty()) 
-               {
-                    JOptionPane.showMessageDialog(this, "Missing Information");
-               }
-               else
-               {
-                    Company_AccessLayer ca=new Company_AccessLayer();
-                    ca.update(Compid.getText(),Compname.getText(),Compad.getText(),Compexp.getText(),Compphone.getText());
-                    JOptionPane.showMessageDialog(this, "Company Updated Successfully");
-                    SelectMed();
-               }
+         
     }//GEN-LAST:event_UpdateBtnMouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked

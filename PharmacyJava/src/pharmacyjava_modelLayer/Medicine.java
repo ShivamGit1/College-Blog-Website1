@@ -15,9 +15,10 @@ abstract interface Med
 {
     abstract void SelectMed();
     abstract void GetCompany();   
-    abstract void addmed(String MedID,String MedName,String MedPrice, String MedQty,String ExpDate,String MfgDate,String Company);
-    abstract void updatemed(String MedID,String MedName,String MedPrice, String MedQty,String ExpDate,String MfgDate,String Company);
-    abstract void delmed(String MedID);
+    abstract void add();
+    abstract void update();
+    abstract void delete();
+    abstract void clear();
    }
 
 
@@ -485,10 +486,16 @@ public class Medicine extends javax.swing.JFrame implements Med
     }//GEN-LAST:event_AddBtnActionPerformed
     
     @Override
-    public void addmed(String MedID,String MedName,String MedPrice, String MedQty,String ExpDate,String MfgDate,String Company) 
+    public void add() 
     {
-        Medicine_AccessLayer mal=new Medicine_AccessLayer();
-            int res=mal.add(MedID,MedName,MedPrice,MedQty,ExpDate,MfgDate,Company);
+        if(MedID.getText().isEmpty()||MedName.getText().isEmpty()||MedPrice.getText().isEmpty()||MedQty.getText().isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(this, "Missing Information");
+        }
+        else
+        {
+             Medicine_AccessLayer mal=new Medicine_AccessLayer();
+            int res=mal.add(MedID.getText(),MedName.getText(),MedPrice.getText(),MedQty.getText(),ExpDate.getText(),MfgDate.getText(),CompOb.getSelectedItem().toString());
             if(res==1)
             {
                 JOptionPane.showMessageDialog(this, "Medicine Successfully Added");
@@ -497,25 +504,24 @@ public class Medicine extends javax.swing.JFrame implements Med
             {
                 JOptionPane.showMessageDialog(this, "Incorrect Information");
             }
+    }
             SelectMed();
     }
     private void AddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddBtnMouseClicked
-        
-        if(MedID.getText().isEmpty()||MedName.getText().isEmpty()||MedPrice.getText().isEmpty()||MedQty.getText().isEmpty()) 
-        {
-            JOptionPane.showMessageDialog(this, "Missing Information");
-        }
-        else
-        {
-            addmed(MedID.getText(),MedName.getText(),MedPrice.getText(),MedQty.getText(),ExpDate.getText(),MfgDate.getText(),CompOb.getSelectedItem().toString());
-        }    
+       add();
     }//GEN-LAST:event_AddBtnMouseClicked
 
     @Override
-    public void delmed(String MedID)
+    public void delete()
     {
+        if(MedID.getText().isEmpty()||MedName.getText().isEmpty()||MedPrice.getText().isEmpty()||MedQty.getText().isEmpty()) 
+        {
+            JOptionPane.showMessageDialog(this, "Enter the Medicine to be Deleted");
+        }
+        else
+        {
             Medicine_AccessLayer mal=new Medicine_AccessLayer();
-            int res=mal.delete(MedID);
+            int res=mal.delete(MedID.getText());
             
             if(res==1)
             {
@@ -525,49 +531,47 @@ public class Medicine extends javax.swing.JFrame implements Med
             {
                 JOptionPane.showMessageDialog(this, "Incorrect Information");
             }
-            SelectMed();       
-    }
-    private void DeleteBthMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteBthMouseClicked
-        if(MedID.getText().isEmpty()||MedName.getText().isEmpty()||MedPrice.getText().isEmpty()||MedQty.getText().isEmpty()) 
-        {
-            JOptionPane.showMessageDialog(this, "Enter the Medicine to be Deleted");
-        }
-        else
-        {
-            delmed(MedID.getText());
+            
+            SelectMed();
             MedID.setText("");
             MedName.setText("");
             MedPrice.setText("");
             MedQty.setText("");
             MfgDate.setText("");
             ExpDate.setText("");    
-        }    
+         
+           
+          }
+    }
+    private void DeleteBthMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteBthMouseClicked
+           delete();
     }//GEN-LAST:event_DeleteBthMouseClicked
     
     @Override
-    public void updatemed(String MedID,String MedName,String MedPrice, String MedQty,String ExpDate,String MfgDate,String Company)
+    public void update()
     {
-        Medicine_AccessLayer mal=new Medicine_AccessLayer();
-        int res=mal.update(MedID,MedName,MedPrice,MedQty,ExpDate,MfgDate,Company);
-        if(res==1)
+        if(MedID.getText().isEmpty()||MedName.getText().isEmpty()||MedPrice.getText().isEmpty()||MedQty.getText().isEmpty()) 
         {
-            JOptionPane.showMessageDialog(this, "Medicine Updated Successfully");
+            JOptionPane.showMessageDialog(this, "Missing Information");
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Incorrect Information");    
+            Medicine_AccessLayer mal=new Medicine_AccessLayer();
+            int res=mal.update(MedID.getText(),MedName.getText(),MedPrice.getText(),MedQty.getText(),ExpDate.getText(),MfgDate.getText(),CompOb.getSelectedItem().toString());     
+            if(res==1)
+            {
+                JOptionPane.showMessageDialog(this, "Medicine Updated Successfully");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Incorrect Information");    
+            }
         }
         SelectMed();
     }
     private void UpdateBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UpdateBtnMouseClicked
-               if(MedID.getText().isEmpty()||MedName.getText().isEmpty()||MedPrice.getText().isEmpty()||MedQty.getText().isEmpty()) 
-               {
-                    JOptionPane.showMessageDialog(this, "Missing Information");
-               }
-               else
-               {
-                    updatemed(MedID.getText(),MedName.getText(),MedPrice.getText(),MedQty.getText(),ExpDate.getText(),MfgDate.getText(),CompOb.getSelectedItem().toString()); 
-               }
+        update(); 
+              
     }//GEN-LAST:event_UpdateBtnMouseClicked
 
     private void MedicineTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MedicineTableMouseClicked
@@ -583,14 +587,18 @@ public class Medicine extends javax.swing.JFrame implements Med
              
         
     }//GEN-LAST:event_MedicineTableMouseClicked
-
+    @Override
+    public void clear()
+    {
+        MedID.setText("");
+        MedName.setText("");
+        MedPrice.setText("");
+        MedQty.setText("");
+        MfgDate.setText("");
+        ExpDate.setText("");
+    }
     private void ClearBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClearBtnMouseClicked
-         MedID.setText("");
-         MedName.setText("");
-          MedPrice.setText("");
-          MedQty.setText("");
-           MfgDate.setText("");
-            ExpDate.setText("");
+        clear();
     }//GEN-LAST:event_ClearBtnMouseClicked
 
     private void ClearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearBtnActionPerformed
